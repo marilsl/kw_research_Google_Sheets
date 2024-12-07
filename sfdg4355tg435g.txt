@@ -1,0 +1,70 @@
+#TeamPlatino.com
+
+Éste es enlace en el que vas a modificar la parte del dominio:
+
+https://v7.authoritas.com/api/v3/visibility-explorer/ranking/keywords/es_es?domains%5B%5D=psicologiaymente.com&pageSize=5000
+
+
+Éste es el código que vamos a emplear:
+
+function transformJSONToSheet() {
+  const jsonData = {
+    //AQUI TODO EL CONTENIDO
+  };
+
+  const columnMapping = {
+    Palabra_clave: "keyword",
+    Búsquedas_mensuales: "searchVolume",
+    CPC: "cpc",
+    URL: "fullUrl",
+    Visibilidad_1: "potentialVisibilityScoreInc",
+    Visibilidad_2: "visibilityIndex",
+    Visibilidad_3: "visibilityIndexShare"
+  };
+
+  const columnOrder = [
+    "Palabra_clave",
+    "Búsquedas_mensuales",
+    "CPC",
+    "URL",
+    "Visibilidad_1",
+    "Visibilidad_2",
+    "Visibilidad_3"
+  ];
+
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  sheet.clear();
+
+  // Agrega los encabezados
+  sheet.appendRow(columnOrder);
+
+  // Agrega los datos
+  jsonData.items.forEach(item => {
+    const row = columnOrder.map(column => {
+      const key = columnMapping[column];
+      const value = item[key];
+      return value !== undefined && value !== null ? value : 0; // Reemplaza valores vacíos o nulos por 0
+    });
+    sheet.appendRow(row);
+  });
+
+  // Aplica color verde a las celdas de "Palabra_clave" con más de 4 palabras
+  const dataRange = sheet.getDataRange();
+  const values = dataRange.getValues();
+
+  const keywordColumnIndex = columnOrder.indexOf("Palabra_clave") + 1;
+  for (let i = 1; i < values.length; i++) { // Ignora la fila de encabezados
+    const cellValue = values[i][keywordColumnIndex - 1]; // Obtén el valor de la celda en la columna "Palabra_clave"
+    if (typeof cellValue === "string" && cellValue.split(" ").length > 4) {
+      const cell = sheet.getRange(i + 1, keywordColumnIndex);
+      cell.setBackground("green");
+    }
+  }
+
+  // Ajusta el ancho de las columnas
+  sheet.setColumnWidth(columnOrder.indexOf("Visibilidad_1") + 1, 100);
+  sheet.setColumnWidth(columnOrder.indexOf("Visibilidad_2") + 1, 100);
+  sheet.setColumnWidth(columnOrder.indexOf("Visibilidad_3") + 1, 100);
+
+  Logger.log("Datos agregados con los ajustes de celdas y ancho de columnas.");
+}
