@@ -1,11 +1,5 @@
-#TeamPlatino.com
-
-Éste es enlace en el que vas a modificar la parte del dominio:
-
-https://v7.authoritas.com/api/v3/visibility-explorer/ranking/keywords/es_es?domains%5B%5D=psicologiaymente.com&pageSize=5000
-
-
-Éste es el código que vamos a emplear:
+#Enlace en el que vas a modificar la parte del dominio: https://v7.authoritas.com/api/v3/visibility-explorer/ranking/keywords/es_es?domains%5B%5D=psicologiaymente.com&pageSize=5000
+//Código que se va a emplear:
 
 function transformJSONToSheet() {
   const jsonData = {
